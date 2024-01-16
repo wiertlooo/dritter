@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DB_URL=mongodb://db:27017/dritter
+
+  db:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=dritter
+
+volumes:
+  mongodb_data:
